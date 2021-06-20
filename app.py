@@ -40,10 +40,13 @@ def solveSudoku():
     
     grid = [ [ 0 for i in range(9)] for row in range(9) ]
     
+    valid_input=False
+    
     for i in range(9):
         for j in range(9):
             value = request.form['grid'+str(i)+str(j)]
             if len(value.strip()) > 0:
+                valid_input=True
                 grid[i][j] = int(value.strip())
     
     init_grid = grid.copy()
@@ -59,7 +62,7 @@ def solveSudoku():
     print_board(grid)
     sudoku_message = '';
     end = time.time()
-    if verify_board(grid):
+    if verify_board(grid) and valid_input:
         data = {}
         for i in range(9):
             for j in range(9):
