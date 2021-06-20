@@ -1,6 +1,6 @@
 opencv-python
 numpy
-tensorflow
+tensorflow-cpu
 Flask
 urllib3
 gunicorn
