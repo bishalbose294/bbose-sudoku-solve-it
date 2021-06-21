@@ -1,239 +1,328 @@
 <!DOCTYPE html>
 <html>
-<head>
-<style>
-<title>Solve IT</title>
-table { border-collapse: collapse; font-family: Calibri, sans-serif; }
-colgroup, tbody { border: solid medium; }
-td { border: solid thin; height: 1.5em; width: 1.5em; text-align: center; padding: 0.5; }
-h2 {
-                font-family: Helvetica, Arial
-        }
-.textbox { 
-            height:30px; 
-            width:35px; 
-            text-align:center; 
-            font-family: Calibri; 
-            font-size: 20px; 
-            color: white;
-            background-color:transparent;
-        }
-
-body {
-                background-image: url('https://png.pngtree.com/thumb_back/fw800/back_pic/04/58/99/64586a0ad51dc03.jpg');
-                font-family: Georgia, Times, serif;
-                color: white;
-                background-color: powderblue
-                background-repeat: no-repeat;
-                background-size: cover;
-        }
-.btncls{
-                background-color:#4CAF50;
-                border: #2e6da4;
-                font-family: Arial, Geneva, Arial, Helvetica,  sans-serif;
-                font-size: 15px;
-                color: #ffff;
-                letter-spacing: 1px;
-                padding: 8px 12px;
-                font-size: 14px;
-                font-weight: normal;
-                border-radius: 4px;
-                line-height: 1.5;
-                text-decoration:none
-        }
-.btn {
-  border: 2px solid gray;
-  color: white;
-  background-color: transparent;
-  padding: 8px 20;
-  border-radius: 4px;
-  font-size: 15px;
-  font-style: italic;
-}
-.content {
-                width: 800px;
-                height: 1200px;
-                position: absolute; /*Can also be `fixed`*/
-                left: 20%;
-                right: 0;
-                top: 20%;
-                bottom: 0;
-                margin: auto;
-                /*Solves a problem in which the content is being cut when the div is smaller than its" wrapper:*/
-                max-width: 100%;
-                max-height: 100%;
-                overflow: auto;
-        }
-input:invalid {
-    border: 3px solid red;
-}
-
-label {
-    color: #B4886B;
-    font-style: italic;
-    display: block;
-    width: 500px;
-    float: center;
-}
-        
-</style>
-<script>
-    function clearForm(){
+  <head>
+    <title>Solve IT
+    </title>
+    <style>
+      table {
+        border-collapse: collapse;
+        font-family: Calibri, sans-serif;
+      }
+      colgroup, tbody {
+        border: solid medium;
+      }
+      td {
+        border: solid thin;
+        height: 1.5em;
+        width: 1.5em;
+        text-align: center;
+        padding: 0.5;
+      }
+      h2 {
+        font-family: Helvetica, Arial
+      }
+      .textbox {
+        height:30px;
+        width:35px;
+        text-align:center;
+        font-family: Calibri;
+        font-size: 20px;
+        color: white;
+        background-color:transparent;
+      }
+      body {
+        background-image: url('https://png.pngtree.com/thumb_back/fw800/back_pic/04/58/99/64586a0ad51dc03.jpg');
+        font-family: Georgia, Times, serif;
+        color: white;
+        background-color: powderblue
+          background-repeat: no-repeat;
+        background-size: cover;
+      }
+      .btncls{
+        background-color:#4CAF50;
+        border: #2e6da4;
+        font-family: Arial, Geneva, Arial, Helvetica,  sans-serif;
+        font-size: 15px;
+        color: #ffff;
+        letter-spacing: 1px;
+        padding: 8px 12px;
+        font-size: 14px;
+        font-weight: normal;
+        border-radius: 4px;
+        line-height: 1.5;
+        text-decoration:none
+      }
+      .btn {
+        border: 2px solid gray;
+        color: white;
+        background-color: transparent;
+        padding: 8px 20;
+        border-radius: 4px;
+        font-size: 15px;
+        font-style: italic;
+      }
+      .content {
+        width: 800px;
+        height: 1200px;
+        position: absolute;
+        /*Can also be `fixed`*/
+        left: 20%;
+        right: 0;
+        top: 20%;
+        bottom: 0;
+        margin: auto;
+        /*Solves a problem in which the content is being cut when the div is smaller than its" wrapper:*/
+        max-width: 100%;
+        max-height: 100%;
+        overflow: auto;
+      }
+      input:invalid {
+        border: 3px solid red;
+      }
+      label {
+        color: #B4886B;
+        font-style: italic;
+        display: block;
+        width: 500px;
+        float: center;
+      }
+    </style>
+    <script>
+      function clearForm(){
         document.getElementById("sudoku").reset();
         document.getElementById("image").reset();
-        }
-    function refreshPage(){
+      }
+      function refreshPage(){
         window.location = "/";
-    } 
-    function uploadCheck(){
+      }
+      function uploadCheck(){
         var nme = document.getElementById("file");
         if(nme.value.length < 1) {
-            alert("Please select sudoku image to upload..");
-            nme.focus();
-            return false;
+          alert("Please select sudoku image to upload..");
+          nme.focus();
+          return false;
         }
         else{
-            document.getElementById("image").submit();
+          document.getElementById("image").submit();
         }
-    }
-    function checkInput(obj){
-    obj.value = obj.value.replace(/[^0-9.]/g, '');
-    }
-</script>
-</head>
-
-<body onload="clearForm()">
-<div class="content">
-
-<h3>Upload Sudoku Image or Enter Manually</h3>
-<form name="image" id="image"  method="POST" action={{ url_for( "readImage") }} enctype="multipart/form-data">
-    <input type="file" class="btn" id="file" name="file" autocomplete="off" > &nbsp; &nbsp; &nbsp; &nbsp;
-    <input type="button" class="btncls" value="Upload" onClick="uploadCheck();">
-    <input type="button" class="btncls" value="Clear" onclick="clearForm();refreshPage();">
-</form>
-<label>{{ image_message }}</label>
-
-
-<h4>Sudoku Grid</h4><br>
-<form name="sudoku" id="sudoku" method="POST" action={{ url_for( "solveSudoku") }}>
-
-<table>
-  
-  <colgroup><col><col><col></colgroup>
-  <colgroup><col><col><col></colgroup>
-  <colgroup><col><col><col></colgroup>
-  <tbody>
-   <tr> 
-    <td><input type="text" class="textbox" maxlength="1" name="grid00" oninput="checkInput(this)" value={{ data.grid00 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid01" oninput="checkInput(this)" value={{ data.grid01 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid02" oninput="checkInput(this)" value={{ data.grid02 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid03" oninput="checkInput(this)" value={{ data.grid03 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid04" oninput="checkInput(this)" value={{ data.grid04 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid05" oninput="checkInput(this)" value={{ data.grid05 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid06" oninput="checkInput(this)" value={{ data.grid06 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid07" oninput="checkInput(this)" value={{ data.grid07 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid08" oninput="checkInput(this)" value={{ data.grid08 }} >
-    
-   <tr> 
-    <td><input type="text" class="textbox" maxlength="1" name="grid10" oninput="checkInput(this)" value={{ data.grid10 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid11" oninput="checkInput(this)" value={{ data.grid11 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid12" oninput="checkInput(this)" value={{ data.grid12 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid13" oninput="checkInput(this)" value={{ data.grid13 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid14" oninput="checkInput(this)" value={{ data.grid14 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid15" oninput="checkInput(this)" value={{ data.grid15 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid16" oninput="checkInput(this)" value={{ data.grid16 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid17" oninput="checkInput(this)" value={{ data.grid17 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid18" oninput="checkInput(this)" value={{ data.grid18 }} >
-
-   <tr>
-    <td><input type="text" class="textbox" maxlength="1" name="grid20" oninput="checkInput(this)" value={{ data.grid20 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid21" oninput="checkInput(this)" value={{ data.grid21 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid22" oninput="checkInput(this)" value={{ data.grid22 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid23" oninput="checkInput(this)" value={{ data.grid23 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid24" oninput="checkInput(this)" value={{ data.grid24 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid25" oninput="checkInput(this)" value={{ data.grid25 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid26" oninput="checkInput(this)" value={{ data.grid26 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid27" oninput="checkInput(this)" value={{ data.grid27 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid28" oninput="checkInput(this)" value={{ data.grid28 }} >
-
-  <tbody>
-    <tr>
-    <td><input type="text" class="textbox" maxlength="1" name="grid30" oninput="checkInput(this)" value={{ data.grid30 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid31" oninput="checkInput(this)" value={{ data.grid31 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid32" oninput="checkInput(this)" value={{ data.grid32 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid33" oninput="checkInput(this)" value={{ data.grid33 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid34" oninput="checkInput(this)" value={{ data.grid34 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid35" oninput="checkInput(this)" value={{ data.grid35 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid36" oninput="checkInput(this)" value={{ data.grid36 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid37" oninput="checkInput(this)" value={{ data.grid37 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid38" oninput="checkInput(this)" value={{ data.grid38 }} >
-
-   <tr>
-    <td><input type="text" class="textbox" maxlength="1" name="grid40" oninput="checkInput(this)" value={{ data.grid40 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid41" oninput="checkInput(this)" value={{ data.grid41 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid42" oninput="checkInput(this)" value={{ data.grid42 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid43" oninput="checkInput(this)" value={{ data.grid43 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid44" oninput="checkInput(this)" value={{ data.grid44 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid45" oninput="checkInput(this)" value={{ data.grid45 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid46" oninput="checkInput(this)" value={{ data.grid46 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid47" oninput="checkInput(this)" value={{ data.grid47 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid48" oninput="checkInput(this)" value={{ data.grid48 }} >
-
-   <tr>
-    <td><input type="text" class="textbox" maxlength="1" name="grid50" oninput="checkInput(this)" value={{ data.grid50 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid51" oninput="checkInput(this)" value={{ data.grid51 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid52" oninput="checkInput(this)" value={{ data.grid52 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid53" oninput="checkInput(this)" value={{ data.grid53 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid54" oninput="checkInput(this)" value={{ data.grid54 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid55" oninput="checkInput(this)" value={{ data.grid55 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid56" oninput="checkInput(this)" value={{ data.grid56 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid57" oninput="checkInput(this)" value={{ data.grid57 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid58" oninput="checkInput(this)" value={{ data.grid58 }} >
-
-  <tbody>
-   <tr>
-    <td><input type="text" class="textbox" maxlength="1" name="grid60" oninput="checkInput(this)" value={{ data.grid60 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid61" oninput="checkInput(this)" value={{ data.grid61 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid62" oninput="checkInput(this)" value={{ data.grid62 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid63" oninput="checkInput(this)" value={{ data.grid63 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid64" oninput="checkInput(this)" value={{ data.grid64 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid65" oninput="checkInput(this)" value={{ data.grid65 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid66" oninput="checkInput(this)" value={{ data.grid66 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid67" oninput="checkInput(this)" value={{ data.grid67 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid68" oninput="checkInput(this)" value={{ data.grid68 }} >
-
-   <tr> 
-    <td><input type="text" class="textbox" maxlength="1" name="grid70" oninput="checkInput(this)" value={{ data.grid70 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid71" oninput="checkInput(this)" value={{ data.grid71 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid72" oninput="checkInput(this)" value={{ data.grid72 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid73" oninput="checkInput(this)" value={{ data.grid73 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid74" oninput="checkInput(this)" value={{ data.grid74 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid75" oninput="checkInput(this)" value={{ data.grid75 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid76" oninput="checkInput(this)" value={{ data.grid76 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid77" oninput="checkInput(this)" value={{ data.grid77 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid78" oninput="checkInput(this)" value={{ data.grid78 }} >
-
-   <tr> 
-    <td><input type="text" class="textbox" maxlength="1" name="grid80" oninput="checkInput(this)" value={{ data.grid80 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid81" oninput="checkInput(this)" value={{ data.grid81 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid82" oninput="checkInput(this)" value={{ data.grid82 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid83" oninput="checkInput(this)" value={{ data.grid83 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid84" oninput="checkInput(this)" value={{ data.grid84 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid85" oninput="checkInput(this)" value={{ data.grid85 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid86" oninput="checkInput(this)" value={{ data.grid86 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid87" oninput="checkInput(this)" value={{ data.grid87 }} >
-    <td><input type="text" class="textbox" maxlength="1" name="grid88" oninput="checkInput(this)" value={{ data.grid88 }} >
-
-</table>
-
-<label>{{ sudoku_message }}</label>
-<br>
-<input type="submit" class="btncls" value="Solve">
-<input type="button" class="btncls" value="Reset" onclick="clearForm();refreshPage();">
-
-</form>
-
-</div>
-
-</body>
-</html>
+      }
+      function checkInput(obj){
+        obj.value = obj.value.replace(/[^0-9.]/g, '');
+      }
+    </script>
+  </head>
+  <body onload="clearForm()">
+    <div class="content">
+      <h3>Upload Sudoku Image or Enter Manually
+      </h3>
+      <form name="image" id="image"  method="POST" action={{ url_for( "readImage") }} enctype="multipart/form-data">
+        <input type="file" class="btn" id="file" name="file" autocomplete="off" > &nbsp; &nbsp; &nbsp; &nbsp;
+        <input type="button" class="btncls" value="Upload" onClick="uploadCheck();">
+        <input type="button" class="btncls" value="Clear" onclick="clearForm();refreshPage();">
+      </form>
+      <label>{{ image_message }}
+      </label>
+      <h4>Sudoku Grid
+      </h4>
+      <br>
+      <form name="sudoku" id="sudoku" method="POST" action={{ url_for( "solveSudoku") }}>
+        <table>
+          <colgroup>
+            <col>
+            <col>
+            <col>
+          </colgroup>
+          <colgroup>
+            <col>
+            <col>
+            <col>
+          </colgroup>
+          <colgroup>
+            <col>
+            <col>
+            <col>
+          </colgroup>
+          <tbody>
+            <tr> 
+              <td>
+                <input type="text" class="textbox" maxlength="1" name="grid00" oninput="checkInput(this)" value={{ data.grid00 }} >
+              <td>
+                <input type="text" class="textbox" maxlength="1" name="grid01" oninput="checkInput(this)" value={{ data.grid01 }} >
+              <td>
+                <input type="text" class="textbox" maxlength="1" name="grid02" oninput="checkInput(this)" value={{ data.grid02 }} >
+              <td>
+                <input type="text" class="textbox" maxlength="1" name="grid03" oninput="checkInput(this)" value={{ data.grid03 }} >
+              <td>
+                <input type="text" class="textbox" maxlength="1" name="grid04" oninput="checkInput(this)" value={{ data.grid04 }} >
+              <td>
+                <input type="text" class="textbox" maxlength="1" name="grid05" oninput="checkInput(this)" value={{ data.grid05 }} >
+              <td>
+                <input type="text" class="textbox" maxlength="1" name="grid06" oninput="checkInput(this)" value={{ data.grid06 }} >
+              <td>
+                <input type="text" class="textbox" maxlength="1" name="grid07" oninput="checkInput(this)" value={{ data.grid07 }} >
+              <td>
+                <input type="text" class="textbox" maxlength="1" name="grid08" oninput="checkInput(this)" value={{ data.grid08 }} >
+                <tr> 
+                  <td>
+                    <input type="text" class="textbox" maxlength="1" name="grid10" oninput="checkInput(this)" value={{ data.grid10 }} >
+                  <td>
+                    <input type="text" class="textbox" maxlength="1" name="grid11" oninput="checkInput(this)" value={{ data.grid11 }} >
+                  <td>
+                    <input type="text" class="textbox" maxlength="1" name="grid12" oninput="checkInput(this)" value={{ data.grid12 }} >
+                  <td>
+                    <input type="text" class="textbox" maxlength="1" name="grid13" oninput="checkInput(this)" value={{ data.grid13 }} >
+                  <td>
+                    <input type="text" class="textbox" maxlength="1" name="grid14" oninput="checkInput(this)" value={{ data.grid14 }} >
+                  <td>
+                    <input type="text" class="textbox" maxlength="1" name="grid15" oninput="checkInput(this)" value={{ data.grid15 }} >
+                  <td>
+                    <input type="text" class="textbox" maxlength="1" name="grid16" oninput="checkInput(this)" value={{ data.grid16 }} >
+                  <td>
+                    <input type="text" class="textbox" maxlength="1" name="grid17" oninput="checkInput(this)" value={{ data.grid17 }} >
+                  <td>
+                    <input type="text" class="textbox" maxlength="1" name="grid18" oninput="checkInput(this)" value={{ data.grid18 }} >
+                    <tr>
+                      <td>
+                        <input type="text" class="textbox" maxlength="1" name="grid20" oninput="checkInput(this)" value={{ data.grid20 }} >
+                      <td>
+                        <input type="text" class="textbox" maxlength="1" name="grid21" oninput="checkInput(this)" value={{ data.grid21 }} >
+                      <td>
+                        <input type="text" class="textbox" maxlength="1" name="grid22" oninput="checkInput(this)" value={{ data.grid22 }} >
+                      <td>
+                        <input type="text" class="textbox" maxlength="1" name="grid23" oninput="checkInput(this)" value={{ data.grid23 }} >
+                      <td>
+                        <input type="text" class="textbox" maxlength="1" name="grid24" oninput="checkInput(this)" value={{ data.grid24 }} >
+                      <td>
+                        <input type="text" class="textbox" maxlength="1" name="grid25" oninput="checkInput(this)" value={{ data.grid25 }} >
+                      <td>
+                        <input type="text" class="textbox" maxlength="1" name="grid26" oninput="checkInput(this)" value={{ data.grid26 }} >
+                      <td>
+                        <input type="text" class="textbox" maxlength="1" name="grid27" oninput="checkInput(this)" value={{ data.grid27 }} >
+                      <td>
+                        <input type="text" class="textbox" maxlength="1" name="grid28" oninput="checkInput(this)" value={{ data.grid28 }} >
+                        <tbody>
+                          <tr>
+                            <td>
+                              <input type="text" class="textbox" maxlength="1" name="grid30" oninput="checkInput(this)" value={{ data.grid30 }} >
+                            <td>
+                              <input type="text" class="textbox" maxlength="1" name="grid31" oninput="checkInput(this)" value={{ data.grid31 }} >
+                            <td>
+                              <input type="text" class="textbox" maxlength="1" name="grid32" oninput="checkInput(this)" value={{ data.grid32 }} >
+                            <td>
+                              <input type="text" class="textbox" maxlength="1" name="grid33" oninput="checkInput(this)" value={{ data.grid33 }} >
+                            <td>
+                              <input type="text" class="textbox" maxlength="1" name="grid34" oninput="checkInput(this)" value={{ data.grid34 }} >
+                            <td>
+                              <input type="text" class="textbox" maxlength="1" name="grid35" oninput="checkInput(this)" value={{ data.grid35 }} >
+                            <td>
+                              <input type="text" class="textbox" maxlength="1" name="grid36" oninput="checkInput(this)" value={{ data.grid36 }} >
+                            <td>
+                              <input type="text" class="textbox" maxlength="1" name="grid37" oninput="checkInput(this)" value={{ data.grid37 }} >
+                            <td>
+                              <input type="text" class="textbox" maxlength="1" name="grid38" oninput="checkInput(this)" value={{ data.grid38 }} >
+                              <tr>
+                                <td>
+                                  <input type="text" class="textbox" maxlength="1" name="grid40" oninput="checkInput(this)" value={{ data.grid40 }} >
+                                <td>
+                                  <input type="text" class="textbox" maxlength="1" name="grid41" oninput="checkInput(this)" value={{ data.grid41 }} >
+                                <td>
+                                  <input type="text" class="textbox" maxlength="1" name="grid42" oninput="checkInput(this)" value={{ data.grid42 }} >
+                                <td>
+                                  <input type="text" class="textbox" maxlength="1" name="grid43" oninput="checkInput(this)" value={{ data.grid43 }} >
+                                <td>
+                                  <input type="text" class="textbox" maxlength="1" name="grid44" oninput="checkInput(this)" value={{ data.grid44 }} >
+                                <td>
+                                  <input type="text" class="textbox" maxlength="1" name="grid45" oninput="checkInput(this)" value={{ data.grid45 }} >
+                                <td>
+                                  <input type="text" class="textbox" maxlength="1" name="grid46" oninput="checkInput(this)" value={{ data.grid46 }} >
+                                <td>
+                                  <input type="text" class="textbox" maxlength="1" name="grid47" oninput="checkInput(this)" value={{ data.grid47 }} >
+                                <td>
+                                  <input type="text" class="textbox" maxlength="1" name="grid48" oninput="checkInput(this)" value={{ data.grid48 }} >
+                                  <tr>
+                                    <td>
+                                      <input type="text" class="textbox" maxlength="1" name="grid50" oninput="checkInput(this)" value={{ data.grid50 }} >
+                                    <td>
+                                      <input type="text" class="textbox" maxlength="1" name="grid51" oninput="checkInput(this)" value={{ data.grid51 }} >
+                                    <td>
+                                      <input type="text" class="textbox" maxlength="1" name="grid52" oninput="checkInput(this)" value={{ data.grid52 }} >
+                                    <td>
+                                      <input type="text" class="textbox" maxlength="1" name="grid53" oninput="checkInput(this)" value={{ data.grid53 }} >
+                                    <td>
+                                      <input type="text" class="textbox" maxlength="1" name="grid54" oninput="checkInput(this)" value={{ data.grid54 }} >
+                                    <td>
+                                      <input type="text" class="textbox" maxlength="1" name="grid55" oninput="checkInput(this)" value={{ data.grid55 }} >
+                                    <td>
+                                      <input type="text" class="textbox" maxlength="1" name="grid56" oninput="checkInput(this)" value={{ data.grid56 }} >
+                                    <td>
+                                      <input type="text" class="textbox" maxlength="1" name="grid57" oninput="checkInput(this)" value={{ data.grid57 }} >
+                                    <td>
+                                      <input type="text" class="textbox" maxlength="1" name="grid58" oninput="checkInput(this)" value={{ data.grid58 }} >
+                                      <tbody>
+                                        <tr>
+                                          <td>
+                                            <input type="text" class="textbox" maxlength="1" name="grid60" oninput="checkInput(this)" value={{ data.grid60 }} >
+                                          <td>
+                                            <input type="text" class="textbox" maxlength="1" name="grid61" oninput="checkInput(this)" value={{ data.grid61 }} >
+                                          <td>
+                                            <input type="text" class="textbox" maxlength="1" name="grid62" oninput="checkInput(this)" value={{ data.grid62 }} >
+                                          <td>
+                                            <input type="text" class="textbox" maxlength="1" name="grid63" oninput="checkInput(this)" value={{ data.grid63 }} >
+                                          <td>
+                                            <input type="text" class="textbox" maxlength="1" name="grid64" oninput="checkInput(this)" value={{ data.grid64 }} >
+                                          <td>
+                                            <input type="text" class="textbox" maxlength="1" name="grid65" oninput="checkInput(this)" value={{ data.grid65 }} >
+                                          <td>
+                                            <input type="text" class="textbox" maxlength="1" name="grid66" oninput="checkInput(this)" value={{ data.grid66 }} >
+                                          <td>
+                                            <input type="text" class="textbox" maxlength="1" name="grid67" oninput="checkInput(this)" value={{ data.grid67 }} >
+                                          <td>
+                                            <input type="text" class="textbox" maxlength="1" name="grid68" oninput="checkInput(this)" value={{ data.grid68 }} >
+                                            <tr> 
+                                              <td>
+                                                <input type="text" class="textbox" maxlength="1" name="grid70" oninput="checkInput(this)" value={{ data.grid70 }} >
+                                              <td>
+                                                <input type="text" class="textbox" maxlength="1" name="grid71" oninput="checkInput(this)" value={{ data.grid71 }} >
+                                              <td>
+                                                <input type="text" class="textbox" maxlength="1" name="grid72" oninput="checkInput(this)" value={{ data.grid72 }} >
+                                              <td>
+                                                <input type="text" class="textbox" maxlength="1" name="grid73" oninput="checkInput(this)" value={{ data.grid73 }} >
+                                              <td>
+                                                <input type="text" class="textbox" maxlength="1" name="grid74" oninput="checkInput(this)" value={{ data.grid74 }} >
+                                              <td>
+                                                <input type="text" class="textbox" maxlength="1" name="grid75" oninput="checkInput(this)" value={{ data.grid75 }} >
+                                              <td>
+                                                <input type="text" class="textbox" maxlength="1" name="grid76" oninput="checkInput(this)" value={{ data.grid76 }} >
+                                              <td>
+                                                <input type="text" class="textbox" maxlength="1" name="grid77" oninput="checkInput(this)" value={{ data.grid77 }} >
+                                              <td>
+                                                <input type="text" class="textbox" maxlength="1" name="grid78" oninput="checkInput(this)" value={{ data.grid78 }} >
+                                                <tr> 
+                                                  <td>
+                                                    <input type="text" class="textbox" maxlength="1" name="grid80" oninput="checkInput(this)" value={{ data.grid80 }} >
+                                                  <td>
+                                                    <input type="text" class="textbox" maxlength="1" name="grid81" oninput="checkInput(this)" value={{ data.grid81 }} >
+                                                  <td>
+                                                    <input type="text" class="textbox" maxlength="1" name="grid82" oninput="checkInput(this)" value={{ data.grid82 }} >
+                                                  <td>
+                                                    <input type="text" class="textbox" maxlength="1" name="grid83" oninput="checkInput(this)" value={{ data.grid83 }} >
+                                                  <td>
+                                                    <input type="text" class="textbox" maxlength="1" name="grid84" oninput="checkInput(this)" value={{ data.grid84 }} >
+                                                  <td>
+                                                    <input type="text" class="textbox" maxlength="1" name="grid85" oninput="checkInput(this)" value={{ data.grid85 }} >
+                                                  <td>
+                                                    <input type="text" class="textbox" maxlength="1" name="grid86" oninput="checkInput(this)" value={{ data.grid86 }} >
+                                                  <td>
+                                                    <input type="text" class="textbox" maxlength="1" name="grid87" oninput="checkInput(this)" value={{ data.grid87 }} >
+                                                  <td>
+                                                    <input type="text" class="textbox" maxlength="1" name="grid88" oninput="checkInput(this)" value={{ data.grid88 }} >
+        </table>
+                                                <label>{{ sudoku_message }}
+                                                </label>
+                                                <br>
+                                                <input type="submit" class="btncls" value="Solve">
+                                                <input type="button" class="btncls" value="Reset" onclick="clearForm();refreshPage();">
+          </form>
+          </div>
+          </body>
+          </html>
