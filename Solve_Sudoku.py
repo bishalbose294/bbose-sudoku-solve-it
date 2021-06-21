@@ -57,7 +57,7 @@ def notInRow(arr, row):
     for i in range(0, 9):
         if arr[row][i] in st:
             return False
-        if arr[row][i] != '.':
+        if arr[row][i] != 0:
             st.add(arr[row][i])
     return True
 
@@ -66,7 +66,7 @@ def notInCol(arr, col):
     for i in range(0, 9):
         if arr[i][col] in st:
             return False
-        if arr[i][col] != '.':
+        if arr[i][col] != 0:
             st.add(arr[i][col])
     return True
 
@@ -77,7 +77,7 @@ def notInBox(arr, startRow, startCol):
             curr = arr[row + startRow][col + startCol]
             if curr in st:
                 return False
-            if curr != '.':
+            if curr != 0:
                 st.add(curr)
     return True
 
