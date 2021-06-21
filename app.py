@@ -128,9 +128,8 @@ def readImage():
             if int(grid[i][j]) != 0:
                 data['grid'+str(i)+str(j)] = grid[i][j]
     
+	end = time.time()
     image_message = "Detected in "+str(round(end-start,4))+" seconds !!"
-    end = time.time()
-    
     
     os.remove(imagePath)
     del file
