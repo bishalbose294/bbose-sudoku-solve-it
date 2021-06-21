@@ -56,8 +56,6 @@ def solveSudoku():
     
     valid_config=False
     
-    
-    
     if isValidConfig(grid,9):
     
         valid_config=True
@@ -101,6 +99,7 @@ def solveSudoku():
     del valid_config
     del start
     del end
+    del valid_input
     gc.collect()
     
     return render_template('sudoku.html', data=data, sudoku_message=sudoku_message, image_message="")
@@ -129,6 +128,10 @@ def readImage():
             if int(grid[i][j]) != 0:
                 data['grid'+str(i)+str(j)] = grid[i][j]
     
+    image_message = "Detected in "+str(round(end-start,4))+" seconds !!"
+    end = time.time()
+    
+    
     os.remove(imagePath)
     del file
     del imagePath
@@ -136,12 +139,11 @@ def readImage():
     del image
     del grid
     del init_grid
+    del start
+    del end
     gc.collect()
-    end = time.time()
-    
-    image_message = "Detected in "+str(round(end-start,4))+" seconds !!"
     
     return render_template('sudoku.html', data=data, sudoku_message="", image_message=image_message)
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8085, debug=True)
+    app.run(host='127.0.0.1', port=8080, debug=True)
