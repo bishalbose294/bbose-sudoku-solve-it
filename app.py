@@ -34,6 +34,7 @@ def home():
 @app.route('/solveSudoku',methods=['POST'])
 def solveSudoku():
     start = time.time()
+    end = 0
     print('\n\n')
     print('*'*25,"Initial Sudoku Grid",'*'*25)
     print('\n\n')
@@ -52,17 +53,25 @@ def solveSudoku():
     init_grid = grid.copy()
     
     print_board(grid)
-    grid = np.array(grid)
     
-    print('\n\n')
-    print('*'*25,"Solving Sudoku Grid",'*'*25)
-    print('\n\n')
+    valid_config=False
     
-    solve_sudoku(grid)
-    print_board(grid)
-    sudoku_message = '';
-    end = time.time()
-    if verify_board(grid) and valid_input:
+    if isValidConfig(grid,9):
+    
+        valid_config=True
+        
+        grid = np.array(grid)
+        
+        print('\n\n')
+        print('*'*25,"Solving Sudoku Grid",'*'*25)
+        print('\n\n')
+        
+        solve_sudoku(grid)
+        print_board(grid)
+        sudoku_message = '';
+        end = time.time()
+        
+    if verify_board(grid) and valid_input and valid_config:
         data = {}
         for i in range(9):
             for j in range(9):
@@ -83,6 +92,10 @@ def solveSudoku():
     print('\n\n')
     
     del grid
+    del init_grid
+    del valid_config
+    del start
+    del end
     gc.collect()
     
     return render_template('sudoku.html', data=data, sudoku_message=sudoku_message, image_message="")
