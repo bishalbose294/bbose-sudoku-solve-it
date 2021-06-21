@@ -56,6 +56,8 @@ def solveSudoku():
     
     valid_config=False
     
+    
+    
     if isValidConfig(grid,9):
     
         valid_config=True
@@ -70,7 +72,10 @@ def solveSudoku():
         print_board(grid)
         sudoku_message = '';
         end = time.time()
-        
+    
+    print('valid_input - ',valid_input)
+    print('valid_config - ',valid_config)
+    
     if verify_board(grid) and valid_input and valid_config:
         data = {}
         for i in range(9):
