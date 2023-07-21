@@ -2,5 +2,6 @@ opencv-python-headless
 numpy
 tensorflow-cpu
 Flask
+flask_cors
 urllib3
-gunicorn
+gevent

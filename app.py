@@ -1,20 +1,28 @@
 import os
 import gc
 import urllib
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, render_template_string
 from Solve_Sudoku import *
 from OpenCV_Sudoku import *
 from NumberExtractor_Sudoku import *
 import time
 import warnings
+from flask_cors import CORS
+from gevent.pywsgi import WSGIServer
+from keras.models import model_from_json
 warnings.filterwarnings('ignore')
 
 
 app = Flask(__name__)
+CORS(app)
 
-app.config['UPLOAD_FOLDER'] = './uploads'
+drive_path = os.getcwd()
 
-drive_path = './'
+app.config['ALLOWED_EXTENSIONS'] = ['.jpg', '.png']
+app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+
+app.config['UPLOAD_FOLDER'] = os.path.join(drive_path,'uploads')
+
 model_path_json = 'models/model.json'
 model_path_weight = 'models/model.h5'
 
@@ -26,10 +34,14 @@ loaded_model = model_from_json(loaded_model_json)
 loaded_model.load_weights(os.path.join(drive_path,model_path_weight))
 print("Loaded saved model from disk.")
 
+# @app.route('/')
+# def hello_world():
+#     return render_template_string("Hello World !")
 
 @app.route('/')
 def home():
     return render_template('sudoku.html', data={}, sudoku_message="", image_message="")
+
 
 @app.route('/solveSudoku',methods=['POST'])
 def solveSudoku():
@@ -145,4 +157,10 @@ def readImage():
     return render_template('sudoku.html', data=data, sudoku_message="", image_message=image_message)
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8080, debug=True)
+    host = '0.0.0.0'
+    port = 7860
+    print("#"*50,"--Application Serving Now--","#"*50)
+    # app.run(host=host,port=port)
+    app_serve = WSGIServer((host,port),app)
+    app_serve.serve_forever()
+
